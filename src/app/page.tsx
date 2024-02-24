@@ -3,6 +3,7 @@ import Link from 'next/link'
 
 async function getPosts() {
   const allPosts = await fetch(process.env.HYGRAPH_ENDPOINT, {
+    next: { revalidate: 10 },
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

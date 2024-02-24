@@ -1,9 +1,12 @@
 import { SinglePage } from '@/queries/pages'
-import { RichText } from '@graphcms/rich-text-react-renderer'
+import { RichText, RichTextProps } from '@graphcms/rich-text-react-renderer'
+import { RichTextContent } from '@graphcms/rich-text-types';
+import { PageModel } from 'models/page'
 import { notFound } from 'next/navigation'
 
-async function getPage(slug) {
+async function getPage(slug): Promise<PageModel> {
   const { page } = await fetch(process.env.HYGRAPH_ENDPOINT, {
+    next: { revalidate: 10 },
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -18,19 +21,21 @@ async function getPage(slug) {
   return page
 }
 
+export const revalidate = 3600
+
 export async function generateMetadata({ params }) {
   const page = await getPage(params.slug)
   if (!page) return notFound()
 
   return {
-    title: page?.seoOverride.title || page.title,
-    description: page.seo?.description || page.description,
+    title: page?.seoOverride?.title || page.title,
+    description: page.seoOverride?.description || page.subtitle,
     openGraph: {
       images: [
         {
-          url: page?.seoOverride?.image?.url || page.coverImage?.url,
-          width: page?.seoOverride?.image?.width || page.coverImage?.width,
-          height: page?.seoOverride?.image?.height || page.coverImage?.height
+          url: page?.seoOverride?.image?.url,
+          width: page?.seoOverride?.image?.width,
+          height: page?.seoOverride?.image?.height
         }
       ]
     }
@@ -54,7 +59,7 @@ export default async function Page({ params }) {
       </div>
       <div className="pb-16 lg:pb-20">
         <div className="prose max-w-none pt-10 pb-8">
-          <RichText content={page.content.raw} />
+          <RichText content={page.content.raw as unknown as RichTextContent} />
         </div>
       </div>
     </div>

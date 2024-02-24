@@ -13,6 +13,7 @@ const AllPosts = `
 const SinglePost = `
   query SinglePost($slug: String!) {
     post(where: { slug: $slug }) {
+      id
       createdAt
       updatedAt
       publishedAt

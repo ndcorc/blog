@@ -11,6 +11,8 @@ const AllPages = `
 const SinglePage = `
   query SinglePage($slug: String!) {
     page(where: { slug: $slug }) {
+      id
+      slug
       title
       seoOverride {
         title

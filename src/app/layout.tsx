@@ -18,8 +18,8 @@ export default function Layout({ children }) {
   return (
     <html lang="en">
       <body>
-        <div className="px-6 max-w-3xl mx-auto">
-          <header className="py-10 relative">
+        <div className="mx-auto">
+          <header className="px-6 py-10 relative sticky">
             <nav className="relative flex items-center justify-between sm:h-10 ">
               <Link href="/" aria-label="Hygraph Next.js Blog Starter">
                 <Image
@@ -42,7 +42,7 @@ export default function Layout({ children }) {
               </ul>
             </nav>
           </header>
-          <main>{children}</main>
+          <main className="mx-auto max-w-3xl">{children}</main>
           <footer className="bg-white mt-5 dark:bg-gray-900">
             <div className="py-6 lg:py-8">
               <div className="md:flex md:justify-between">

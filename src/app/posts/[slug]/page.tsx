@@ -7,6 +7,7 @@ import { cookies,draftMode } from 'next/headers'
 
 async function getPosts() {
   const allPosts = await fetch(process.env.HYGRAPH_ENDPOINT, {
+    next: { revalidate: 10 },
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -19,12 +20,13 @@ async function getPosts() {
   return allPosts.data.posts
 }
 
-
+export const revalidate = 3600
 
 async function getData(slug) {
   const cookieStore = cookies()
   const apiUrl = cookieStore.get('apiUrl')?.value
   const { post } = await fetch((apiUrl ? apiUrl : process.env.HYGRAPH_ENDPOINT), {
+    next: { revalidate: 10 },
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
